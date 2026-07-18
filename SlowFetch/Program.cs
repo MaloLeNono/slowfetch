@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace SlowFetch;
 
@@ -6,6 +7,8 @@ internal static class Program
 {
     private static int Main()
     {
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+        
         string[] truck =
         [
             " /‾‾|‾‾‾‾‾‾| delivery",
@@ -21,10 +24,10 @@ internal static class Program
             @"/ \"
         ];
         
-        Console.OutputEncoding = System.Text.Encoding.UTF8;
         ProcessStartInfo processStartInfo = new("fastfetch", string.Empty)
         {
             RedirectStandardOutput = true,
+            StandardOutputEncoding = System.Text.Encoding.UTF8
         };
 
         Process? process = Process.Start(processStartInfo);
@@ -36,6 +39,7 @@ internal static class Program
         }
 
         string fetchOutput = process.StandardOutput.ReadToEnd();
+        fetchOutput = Regex.Replace(fetchOutput, @"\x1b\[[0-9;]*[a-zA-Z]", "");
         string[] fetchLines = fetchOutput.Split('\n');
         
         string longestLine = "";
@@ -45,7 +49,7 @@ internal static class Program
 
         int guyX = longestLine.Length + 5;
         int guyY = fetchLines.Length / 2;
-        const int waitTime = 0;
+        const int waitTime = 200;
 
         int truckX = guyX + 10;
         
@@ -57,6 +61,9 @@ internal static class Program
         {
             for (int x = 0; x < fetchLines[y].Length; x++)
             {
+                while (Console.KeyAvailable)
+                    Console.ReadKey(true);
+                
                 if (char.IsWhiteSpace(fetchLines[y][x])) continue;
                 
                 DrawArt(guy, guyX, guyY);
@@ -75,7 +82,9 @@ internal static class Program
         
         EraseArt(guy, guyX, guyY);
         EraseArt(truck, truckX, guyY);
-
+        
+        Console.SetCursorPosition(0, fetchLines.Length + 1);
+        
         return 0;
     }
 
