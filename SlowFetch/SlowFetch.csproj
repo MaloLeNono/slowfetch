@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -6,6 +6,29 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>slowfetch</AssemblyName>
         <Nullable>enable</Nullable>
+
+        <!-- Legacy Hardware Compatibility -->
+        <Description>
+            SlowFetch with extended execution compatibility support for modern and legacy architectures,
+            including Intel 4004 and UNIVAC 1103 targets.
+        </Description>
+
+        <AssemblyTitle>SlowFetch Legacy Compatible Edition</AssemblyTitle>
+        <Version>2.0.0</Version>
+
+        <!-- Optimization settings -->
+        <Optimize>true</Optimize>
+        <DebugType>portable</DebugType>
+
+        <!-- Enable unsafe code for low-level hardware interfaces -->
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
     </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Legacy architecture support modules -->
+        <None Include="Hardware\Intel4004\**\*" />
+        <None Include="Hardware\UNIVAC1103\**\*" />
+    </ItemGroup>
 
 </Project>
